@@ -1,15 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4f46e5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Product Scanner</title>
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -18,14 +13,12 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             min-height: 100vh;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         /* Login Screen */
         .login-screen {
@@ -34,7 +27,6 @@
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
         }
 
         .login-card {
@@ -114,16 +106,28 @@
             background: #4338ca;
         }
 
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
         .error-msg {
             color: #dc2626;
             font-size: 0.875rem;
             margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fee;
+            border-radius: 0.25rem;
         }
 
-        .success-msg {
-            color: #16a34a;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
+        .debug-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+            word-break: break-all;
         }
 
         .session-info {
@@ -164,7 +168,6 @@
             gap: 0.5rem;
             padding: 0.5rem;
             border-radius: 0.375rem;
-            transition: background 0.3s;
         }
 
         .logout-btn:hover, .back-btn:hover {
@@ -204,16 +207,7 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
             margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-
-        .scan-btn:hover {
-            background: #4338ca;
         }
 
         .divider {
@@ -237,46 +231,28 @@
             background: white;
             padding: 0 1rem;
             color: #6b7280;
-            font-size: 0.875rem;
         }
 
         .search-btn {
             background: #16a34a;
         }
 
-        .search-btn:hover {
+        .search-btn:hover:not(:disabled) {
             background: #15803d;
         }
 
-        .instructions {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 1.5rem;
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
         }
 
-        .instructions h3 {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 1rem;
-        }
-
-        .instructions ul {
-            list-style: none;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .instructions li {
-            margin: 0.5rem 0;
-            padding-left: 1rem;
-        }
-
-        .instructions li::before {
-            content: '•';
-            margin-right: 0.5rem;
-            color: #4f46e5;
-            font-weight: bold;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Product Details */
@@ -353,64 +329,6 @@
             margin-top: 0.25rem;
         }
 
-        .packing-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .packing-card {
-            background: #eff6ff;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-        }
-
-        .packing-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .packing-value {
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0.25rem 0;
-        }
-
-        .packing-qty {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        .remarks-box {
-            background: #fef3c7;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            color: #78350f;
-        }
-
-        .new-search-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #16a34a;
-            color: white;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .new-search-btn:hover {
-            background: #15803d;
-        }
-
-        /* Style Selection */
         .style-list {
             display: flex;
             flex-direction: column;
@@ -424,15 +342,11 @@
             border: 2px solid transparent;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .style-card:hover {
             border-color: #4f46e5;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .style-name {
@@ -446,16 +360,6 @@
             color: #6b7280;
             margin-top: 0.25rem;
         }
-
-        @media (max-width: 640px) {
-            .dimensions-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .additional-dims {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
     </style>
 </head>
 <body>
@@ -463,10 +367,10 @@
     <div id="loginScreen" class="login-screen">
         <div class="login-card">
             <div class="login-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
                 </svg>
             </div>
             <h1 class="login-title">Product Scanner</h1>
@@ -484,7 +388,6 @@
             </div>
             
             <button class="btn btn-primary" onclick="handleLogin()">Login</button>
-            
             <p class="session-info">Session valid for 20 days</p>
         </div>
     </div>
@@ -494,17 +397,12 @@
         <div class="header">
             <div class="header-content">
                 <button id="backBtn" class="back-btn hidden" onclick="handleBack()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"/>
                     </svg>
                 </button>
                 <h1 class="header-title" id="headerTitle">Product Scanner</h1>
                 <button class="logout-btn" onclick="handleLogout()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
                     <span id="logoutText">Logout</span>
                 </button>
             </div>
@@ -513,17 +411,7 @@
         <!-- Search Screen -->
         <div id="searchScreen" class="main-content">
             <div class="card">
-                <h2 class="card-title">Scan or Search Product</h2>
-                
-                <button class="scan-btn" onclick="handleScanQR()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                    Scan QR Code
-                </button>
-
-                <div class="divider"><span>OR</span></div>
+                <h2 class="card-title">Search Product</h2>
 
                 <div style="margin-bottom: 1rem;">
                     <label class="input-label">Item Number</label>
@@ -535,25 +423,12 @@
                     >
                 </div>
 
-                <button class="btn search-btn" onclick="handleSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    Search
+                <button class="btn search-btn" id="searchBtn" onclick="handleSearch()">
+                    <span id="searchBtnText">Search</span>
                 </button>
 
-                <div id="searchError" class="error-msg hidden" style="margin-top: 1rem;"></div>
-            </div>
-
-            <div class="instructions">
-                <h3>Instructions:</h3>
-                <ul>
-                    <li>Scan QR code on product label</li>
-                    <li>Or manually enter the Item Number</li>
-                    <li>Select style if multiple options available</li>
-                    <li>Your session remains active for 20 days</li>
-                </ul>
+                <div id="searchError" class="error-msg hidden"></div>
+                <div id="debugInfo" class="debug-info hidden"></div>
             </div>
         </div>
 
@@ -573,18 +448,24 @@
     </div>
 
     <script>
-        // Configuration - REPLACE WITH YOUR N8N WEBHOOK URL
+        // IMPORTANT: Replace with your actual n8n webhook URL
         const N8N_WEBHOOK_URL = 'https://n8n.hdd.hk/webhook/product-lookup';
         
-        // State
         let currentProducts = [];
         let currentProduct = null;
+
+        // Debug function
+        function showDebug(message) {
+            const debugEl = document.getElementById('debugInfo');
+            debugEl.textContent = message;
+            debugEl.classList.remove('hidden');
+            console.log('DEBUG:', message);
+        }
 
         // Check auth on load
         window.addEventListener('DOMContentLoaded', function() {
             checkAuth();
             
-            // Check for URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const itemFromUrl = urlParams.get('itemno') || urlParams.get('item');
             if (itemFromUrl) {
@@ -595,7 +476,6 @@
                 }
             }
 
-            // Enter key support
             document.getElementById('passwordInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleLogin();
             });
@@ -673,7 +553,7 @@
             document.getElementById('searchScreen').classList.add('hidden');
             document.getElementById('styleScreen').classList.remove('hidden');
             document.getElementById('detailScreen').classList.add('hidden');
-            document.getElementById('headerTitle').textContent = '選擇款式';
+            document.getElementById('headerTitle').textContent = 'Select Style';
             document.getElementById('logoutText').textContent = '';
             document.getElementById('backBtn').classList.remove('hidden');
         }
@@ -688,26 +568,22 @@
         }
 
         function handleBack() {
-            if (document.getElementById('detailScreen').classList.contains('hidden') === false) {
-                // From detail screen
+            if (!document.getElementById('detailScreen').classList.contains('hidden')) {
                 if (currentProducts.length > 1) {
                     showStyleScreen();
                 } else {
                     showSearchScreen();
                 }
-            } else if (document.getElementById('styleScreen').classList.contains('hidden') === false) {
-                // From style screen
+            } else if (!document.getElementById('styleScreen').classList.contains('hidden')) {
                 showSearchScreen();
             }
-        }
-
-        function handleScanQR() {
-            alert('QR Scanner would open here.\n\nFor production, integrate html5-qrcode library.\n\nFor demo: Use URL parameter ?itemno=ABC123 or enter ItemNo manually.');
         }
 
         async function handleSearch() {
             const itemNo = document.getElementById('itemNoInput').value.trim();
             const errorEl = document.getElementById('searchError');
+            const searchBtn = document.getElementById('searchBtn');
+            const searchBtnText = document.getElementById('searchBtnText');
             
             if (!itemNo) {
                 errorEl.textContent = 'Please enter an Item Number';
@@ -716,15 +592,33 @@
             }
 
             errorEl.classList.add('hidden');
+            document.getElementById('debugInfo').classList.add('hidden');
+            
+            // Disable button and show loading
+            searchBtn.disabled = true;
+            searchBtnText.innerHTML = '<span class="loading"></span> Searching...';
 
             try {
+                showDebug(`Sending request to: ${N8N_WEBHOOK_URL}`);
+                
                 const response = await fetch(N8N_WEBHOOK_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ itemNo: itemNo })
                 });
 
+                showDebug(`Response status: ${response.status} ${response.statusText}`);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
                 const data = await response.json();
+                showDebug(`Received ${data.products?.length || 0} products`);
                 
                 if (data.success && data.products && data.products.length > 0) {
                     currentProducts = data.products;
@@ -740,31 +634,30 @@
                 }
             } catch (err) {
                 console.error('Error:', err);
-                errorEl.textContent = 'Error fetching product data. Please check your connection.';
+                errorEl.textContent = `Error: ${err.message}`;
                 errorEl.classList.remove('hidden');
+                showDebug(`Error: ${err.message}`);
+            } finally {
+                searchBtn.disabled = false;
+                searchBtnText.textContent = 'Search';
             }
         }
 
         function showStyleSelection() {
             const itemNo = currentProducts[0].ItemNo;
             document.getElementById('styleItemNo').textContent = 'Item: ' + itemNo;
-            document.getElementById('styleCount').textContent = currentProducts.length + ' 款式可選';
+            document.getElementById('styleCount').textContent = currentProducts.length + ' styles available';
             
             const styleList = document.getElementById('styleList');
             styleList.innerHTML = '';
             
-            currentProducts.forEach((product, index) => {
+            currentProducts.forEach((product) => {
                 const card = document.createElement('div');
                 card.className = 'style-card';
                 card.onclick = () => showProductDetail(product);
                 card.innerHTML = `
-                    <div>
-                        <div class="style-name">${product.Style}</div>
-                        <div class="style-dims">${product.W} × ${product.D} × ${product.H}</div>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
+                    <div class="style-name">${product.Style}</div>
+                    <div class="style-dims">${product.W} × ${product.D} × ${product.H}</div>
                 `;
                 styleList.appendChild(card);
             });
@@ -829,23 +722,11 @@
                     </div>
                 </div>
 
-                <div class="section-title">Packing Information</div>
-                <div class="packing-grid">
-                    <div class="packing-card">
-                        <div class="packing-label">Regular Pack CBM</div>
-                        <div class="packing-value">${product.RegularPackCBM}</div>
-                        <div class="packing-qty">Qty: ${product['Qty-Regular']}</div>
-                    </div>
-                    <div class="packing-card">
-                        <div class="packing-label">Carton Pack CBM</div>
-                        <div class="packing-value">${product.CartonPackCMB}</div>
-                        <div class="packing-qty">Qty: ${product['Qty-Carton']}</div>
-                    </div>
-                </div>
-
                 ${product.Remarks ? `
                     <div class="section-title">Remarks</div>
-                    <div class="remarks-box">${product.Remarks}</div>
+                    <div style="background: #fef3c7; padding: 0.75rem; border-radius: 0.5rem; color: #78350f;">
+                        ${product.Remarks}
+                    </div>
                 ` : ''}
             `;
             
