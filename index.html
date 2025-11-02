@@ -1,26 +1,77 @@
-// Simple one-time test
-const testURLs = [
-  'https://n8n.hdd.hk/webhook/product-lookup',
-  'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://n8n.hdd.hk/webhook/product-lookup'),
-  'https://corsproxy.io/?' + encodeURIComponent('https://n8n.hdd.hk/webhook/product-lookup')
-];
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GET Product Lookup - ItemNo Fixed</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; white-space: pre-wrap; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>GET Product Lookup - ItemNo Fixed</h1>
+    <input type="text" id="itemNo" value="BO-9017" class="input" placeholder="Enter Item Number">
+    <button onclick="testGetMethod()" class="button">Test GET Method</button>
+    
+    <h3>Test URL:</h3>
+    <p><a id="testUrl" href="#" target="_blank">Click to test in new tab</a></p>
+    
+    <div id="result"></div>
 
-async function quickTest() {
-  for (let url of testURLs) {
-    console.log('Testing:', url);
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({itemNo: "BO-9017"})
-      });
-      const data = await response.json();
-      console.log('✅ SUCCESS with:', url, data);
-      break; // Stop at first success
-    } catch (err) {
-      console.log('❌ Failed with:', url, err.message);
-    }
-  }
-}
+    <script>
+        function testGetMethod() {
+            const itemNo = document.getElementById('itemNo').value.trim();
+            const resultEl = document.getElementById('result');
+            const testUrlEl = document.getElementById('testUrl');
+            
+            if (!itemNo) {
+                showResult('Please enter Item Number', 'error');
+                return;
+            }
 
-quickTest();
+            // Use ItemNo with capital I
+            const testUrl = `https://n8n.hdd.hk/webhook/product-get?ItemNo=${encodeURIComponent(itemNo)}`;
+            testUrlEl.href = testUrl;
+            testUrlEl.textContent = testUrl;
+
+            showResult('Testing GET request...', '');
+
+            // Make GET request
+            fetch(testUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    showResult(JSON.stringify(data, null, 2), 'success');
+                })
+                .catch(error => {
+                    showResult('Error: ' + error.message, 'error');
+                });
+        }
+
+        function showResult(message, className) {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = message;
+            resultEl.className = 'result ' + className;
+        }
+
+        // Update test URL when typing
+        document.getElementById('itemNo').addEventListener('input', function() {
+            const itemNo = this.value.trim();
+            const testUrlEl = document.getElementById('testUrl');
+            if (itemNo) {
+                const testUrl = `https://n8n.hdd.hk/webhook/product-get?ItemNo=${encodeURIComponent(itemNo)}`;
+                testUrlEl.href = testUrl;
+                testUrlEl.textContent = testUrl;
+            }
+        });
+
+        // Initialize
+        document.getElementById('itemNo').dispatchEvent(new Event('input'));
+    </script>
+</body>
+</html>
