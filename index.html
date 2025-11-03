@@ -3,873 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4f46e5">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Product Scanner</title>
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            min-height: 100vh;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Login Screen */
-        .login-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-icon {
-            width: 80px;
-            height: 80px;
-            background: #4f46e5;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-        }
-
-        .login-title {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 2rem;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            border: 2px solid #d1d5db;
-            border-radius: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #4338ca;
-        }
-
-        .error-msg {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        .success-msg {
-            color: #16a34a;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        .session-info {
-            text-align: center;
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Header */
-        .header {
-            background: #4f46e5;
-            color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-
-        .logout-btn, .back-btn {
-            background: transparent;
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            transition: background 0.3s;
-        }
-
-        .logout-btn:hover, .back-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Main Content */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .scan-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-
-        .scan-btn:hover {
-            background: #4338ca;
-        }
-
-        .divider {
-            position: relative;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #d1d5db;
-        }
-
-        .divider span {
-            position: relative;
-            background: white;
-            padding: 0 1rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .search-btn {
-            background: #16a34a;
-        }
-
-        .search-btn:hover {
-            background: #15803d;
-        }
-
-        .instructions {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-        }
-
-        .instructions h3 {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 1rem;
-        }
-
-        .instructions ul {
-            list-style: none;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .instructions li {
-            margin: 0.5rem 0;
-            padding-left: 1rem;
-        }
-
-        .instructions li::before {
-            content: '•';
-            margin-right: 0.5rem;
-            color: #4f46e5;
-            font-weight: bold;
-        }
-
-        /* Product Details */
-        .product-header {
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .product-item-no {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .product-style {
-            font-size: 1.125rem;
-            color: #4f46e5;
-            font-weight: 600;
-            margin-top: 0.25rem;
-        }
-
-        .dimensions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .dimension-card {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .dimension-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .dimension-value {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #1f2937;
-            margin-top: 0.25rem;
-        }
-
-        .section-title {
-            font-weight: 600;
-            color: #1f2937;
-            margin: 1.5rem 0 1rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .additional-dims {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-        }
-
-        .small-dim {
-            text-align: center;
-        }
-
-        .small-dim-label {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        .small-dim-value {
-            font-weight: 600;
-            color: #1f2937;
-            margin-top: 0.25rem;
-        }
-
-        .packing-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .packing-card {
-            background: #eff6ff;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-        }
-
-        .packing-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-        }
-
-        .packing-value {
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0.25rem 0;
-        }
-
-        .packing-qty {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        .remarks-box {
-            background: #fef3c7;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            color: #78350f;
-        }
-
-        .new-search-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #16a34a;
-            color: white;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .new-search-btn:hover {
-            background: #15803d;
-        }
-
-        /* Style Selection */
-        .style-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .style-card {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .style-card:hover {
-            border-color: #4f46e5;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-        }
-
-        .style-name {
-            font-weight: bold;
-            font-size: 1.125rem;
-            color: #1f2937;
-        }
-
-        .style-dims {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-top: 0.25rem;
-        }
-
-        @media (max-width: 640px) {
-            .dimensions-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .additional-dims {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        /* Your existing CSS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); min-height: 100vh; }
+        .hidden { display: none !important; }
+        .main-content { max-width: 600px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .input-field { width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 1rem; margin-bottom: 1rem; }
+        .btn { width: 100%; padding: 0.875rem; background: #4f46e5; color: white; border: none; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; }
+        .error-msg { background: #fef2f2; color: #dc2626; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card">
-            <div class="login-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-            </div>
-            <h1 class="login-title">Product Scanner</h1>
-            <p class="login-subtitle">Enter your staff password to continue</p>
-            
-            <div style="margin-bottom: 1.5rem;">
-                <label class="input-label">Password</label>
-                <input 
-                    type="password" 
-                    id="passwordInput" 
-                    class="input-field" 
-                    placeholder="Enter your password"
-                >
-                <div id="loginError" class="error-msg hidden"></div>
-            </div>
-            
-            <button class="btn btn-primary" onclick="handleLogin()">Login</button>
-            
-            <p class="session-info">Session valid for 20 days</p>
-        </div>
-    </div>
-
-    <!-- Main App Screen -->
-    <div id="mainScreen" class="hidden">
-        <div class="header">
-            <div class="header-content">
-                <button id="backBtn" class="back-btn hidden" onclick="handleBack()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <h1 class="header-title" id="headerTitle">Product Scanner</h1>
-                <button class="logout-btn" onclick="handleLogout()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                    <span id="logoutText">Logout</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Search Screen -->
-        <div id="searchScreen" class="main-content">
-            <div class="card">
-                <h2 class="card-title">Scan or Search Product</h2>
-                
-                <button class="scan-btn" onclick="handleScanQR()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                    Scan QR Code
-                </button>
-
-                <div class="divider"><span>OR</span></div>
-
-                <div style="margin-bottom: 1rem;">
-                    <label class="input-label">Item Number</label>
-                    <input 
-                        type="text" 
-                        id="itemNoInput" 
-                        class="input-field" 
-                        placeholder="Enter Item Number"
-                    >
-                </div>
-
-                <button class="btn search-btn" onclick="handleSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    Search
-                </button>
-
-                <div id="searchError" class="error-msg hidden" style="margin-top: 1rem;"></div>
-            </div>
-
-            <div class="instructions">
-                <h3>Instructions:</h3>
-                <ul>
-                    <li>Scan QR code on product label</li>
-                    <li>Or manually enter the Item Number</li>
-                    <li>Select style if multiple options available</li>
-                    <li>Your session remains active for 20 days</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Style Selection Screen -->
-        <div id="styleScreen" class="main-content hidden">
-            <div class="card">
-                <h2 id="styleItemNo" class="card-title"></h2>
-                <p id="styleCount" style="text-align: center; color: #6b7280; margin-bottom: 1.5rem;"></p>
-                <div id="styleList" class="style-list"></div>
-            </div>
-        </div>
-
-        <!-- Product Details Screen -->
-        <div id="detailScreen" class="main-content hidden">
-            <div class="card" id="productDetails"></div>
+    <div class="main-content">
+        <div class="card">
+            <h2>Product Lookup</h2>
+            <input type="text" id="itemNoInput" class="input-field" placeholder="Enter Item Number" value="BO-9017">
+            <button class="btn" onclick="handleSearch()">Search Product</button>
+            <div id="result"></div>
         </div>
     </div>
 
     <script>
-        // Configuration - REPLACE WITH YOUR N8N PRODUCTION WEBHOOK URL
-        // IMPORTANT: Use 'webhook' NOT 'webhook-test' for production
-        const N8N_WEBHOOK_URL = 'https://n8n.hdd.hk/webhook/product-lookup';
-        
-        // State
-        let currentProducts = [];
-        let currentProduct = null;
-
-        // Check auth on load
-        window.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            
-            // Check for URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const itemFromUrl = urlParams.get('itemno') || urlParams.get('item');
-            if (itemFromUrl) {
-                document.getElementById('itemNoInput').value = itemFromUrl;
-                const authData = localStorage.getItem('productScannerAuth');
-                if (authData) {
-                    handleSearch();
-                }
-            }
-
-            // Enter key support
-            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') handleLogin();
-            });
-            document.getElementById('itemNoInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') handleSearch();
-            });
-        });
-
-        function checkAuth() {
-            const authData = localStorage.getItem('productScannerAuth');
-            if (authData) {
-                try {
-                    const { timestamp } = JSON.parse(authData);
-                    const daysSinceLogin = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
-                    
-                    if (daysSinceLogin < 20) {
-                        showMainScreen();
-                        return true;
-                    } else {
-                        localStorage.removeItem('productScannerAuth');
-                    }
-                } catch (e) {
-                    localStorage.removeItem('productScannerAuth');
-                }
-            }
-            showLoginScreen();
-            return false;
-        }
-
-        function handleLogin() {
-            const password = document.getElementById('passwordInput').value;
-            const errorEl = document.getElementById('loginError');
-            
-            if (password.trim().length > 0) {
-                localStorage.setItem('productScannerAuth', JSON.stringify({
-                    timestamp: Date.now(),
-                    authenticated: true
-                }));
-                showMainScreen();
-            } else {
-                errorEl.textContent = 'Please enter a password';
-                errorEl.classList.remove('hidden');
-            }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('productScannerAuth');
-            currentProducts = [];
-            currentProduct = null;
-            document.getElementById('itemNoInput').value = '';
-            showLoginScreen();
-        }
-
-        function showLoginScreen() {
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('mainScreen').classList.add('hidden');
-        }
-
-        function showMainScreen() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainScreen').classList.remove('hidden');
-            showSearchScreen();
-        }
-
-        function showSearchScreen() {
-            document.getElementById('searchScreen').classList.remove('hidden');
-            document.getElementById('styleScreen').classList.add('hidden');
-            document.getElementById('detailScreen').classList.add('hidden');
-            document.getElementById('headerTitle').textContent = 'Product Scanner';
-            document.getElementById('logoutText').textContent = 'Logout';
-            document.getElementById('backBtn').classList.add('hidden');
-        }
-
-        function showStyleScreen() {
-            document.getElementById('searchScreen').classList.add('hidden');
-            document.getElementById('styleScreen').classList.remove('hidden');
-            document.getElementById('detailScreen').classList.add('hidden');
-            document.getElementById('headerTitle').textContent = '選擇款式';
-            document.getElementById('logoutText').textContent = '';
-            document.getElementById('backBtn').classList.remove('hidden');
-        }
-
-        function showDetailScreen() {
-            document.getElementById('searchScreen').classList.add('hidden');
-            document.getElementById('styleScreen').classList.add('hidden');
-            document.getElementById('detailScreen').classList.remove('hidden');
-            document.getElementById('headerTitle').textContent = 'Product Details';
-            document.getElementById('logoutText').textContent = '';
-            document.getElementById('backBtn').classList.remove('hidden');
-        }
-
-        function handleBack() {
-            if (document.getElementById('detailScreen').classList.contains('hidden') === false) {
-                // From detail screen
-                if (currentProducts.length > 1) {
-                    showStyleScreen();
-                } else {
-                    showSearchScreen();
-                }
-            } else if (document.getElementById('styleScreen').classList.contains('hidden') === false) {
-                // From style screen
-                showSearchScreen();
-            }
-        }
-
-        function handleNewSearch() {
-            // Clear current data
-            currentProducts = [];
-            currentProduct = null;
-            document.getElementById('itemNoInput').value = '';
-            document.getElementById('searchError').classList.add('hidden');
-            
-            // Return to search screen
-            showSearchScreen();
-        }
-
-        function handleScanQR() {
-            alert('QR Scanner would open here.\n\nFor production, integrate html5-qrcode library.\n\nFor demo: Use URL parameter ?itemno=ABC123 or enter ItemNo manually.');
-        }
-
         async function handleSearch() {
             const itemNo = document.getElementById('itemNoInput').value.trim();
-            const errorEl = document.getElementById('searchError');
+            const resultEl = document.getElementById('result');
             
             if (!itemNo) {
-                errorEl.textContent = 'Please enter an Item Number';
-                errorEl.classList.remove('hidden');
+                resultEl.innerHTML = '<div class="error-msg">Please enter Item Number</div>';
                 return;
             }
 
-            errorEl.classList.add('hidden');
+            resultEl.innerHTML = 'Searching...';
 
             try {
-                const response = await fetch(N8N_WEBHOOK_URL, {
+                // Method 1: Try direct request first
+                const response = await fetch('https://n8n.hdd.hk/webhook/product-lookup', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({ itemNo: itemNo })
                 });
 
-                const data = await response.json();
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
-                if (data.success && data.products && data.products.length > 0) {
-                    currentProducts = data.products;
+                const data = await response.json();
+                displayResult(data);
+                
+            } catch (error) {
+                console.log('Direct request failed, trying proxy...');
+                
+                // Method 2: Use CORS proxy as fallback
+                try {
+                    const proxyResponse = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://n8n.hdd.hk/webhook/product-lookup')}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ itemNo: itemNo })
+                    });
                     
-                    if (data.products.length === 1) {
-                        showProductDetail(data.products[0]);
-                    } else {
-                        showStyleSelection();
-                    }
-                } else {
-                    errorEl.textContent = 'No products found for this Item Number';
-                    errorEl.classList.remove('hidden');
+                    const proxyData = await proxyResponse.json();
+                    displayResult(proxyData);
+                    
+                } catch (proxyError) {
+                    // Method 3: Last resort - use no-cors and suggest manual check
+                    resultEl.innerHTML = `
+                        <div class="error-msg">
+                            CORS Issue Detected<br><br>
+                            Please:<br>
+                            1. Check n8n OPTIONS method configuration<br>
+                            2. Or run this curl command:<br>
+                            <code style="background:#f3f4f6;padding:0.5rem;display:block;margin-top:0.5rem;">
+                            curl -X POST https://n8n.hdd.hk/webhook/product-lookup -H "Content-Type: application/json" -d '{"itemNo":"${itemNo}"}'
+                            </code>
+                        </div>
+                    `;
                 }
-            } catch (err) {
-                console.error('Error:', err);
-                errorEl.textContent = 'Error fetching product data. Please check your connection.';
-                errorEl.classList.remove('hidden');
             }
         }
 
-        function showStyleSelection() {
-            const itemNo = currentProducts[0].ItemNo;
-            document.getElementById('styleItemNo').textContent = 'Item: ' + itemNo;
-            document.getElementById('styleCount').textContent = currentProducts.length + ' 款式可選';
+        function displayResult(data) {
+            const resultEl = document.getElementById('result');
             
-            const styleList = document.getElementById('styleList');
-            styleList.innerHTML = '';
-            
-            currentProducts.forEach((product, index) => {
-                const card = document.createElement('div');
-                card.className = 'style-card';
-                card.onclick = () => showProductDetail(product);
-                card.innerHTML = `
-                    <div>
-                        <div class="style-name">${product.Style}</div>
-                        <div class="style-dims">${product.W} × ${product.D} × ${product.H}</div>
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                `;
-                styleList.appendChild(card);
-            });
-            
-            showStyleScreen();
+            if (data.success && data.products && data.products.length > 0) {
+                let html = '<div style="background:#f0f9ff;padding:1rem;border-radius:0.5rem;margin-top:1rem;">';
+                html += `<h3>Found ${data.products.length} Product(s)</h3>`;
+                
+                data.products.forEach(product => {
+                    html += `<div style="border:1px solid #bae6fd;padding:1rem;margin:0.5rem 0;border-radius:0.25rem;">`;
+                    html += `<strong>ItemNo:</strong> ${product.ItemNo}<br>`;
+                    html += `<strong>Style:</strong> ${product.Style || 'N/A'}<br>`;
+                    html += `<strong>Dimensions:</strong> ${product.W || ''} x ${product.D || ''} x ${product.H || ''}`;
+                    html += `</div>`;
+                });
+                
+                html += '</div>';
+                resultEl.innerHTML = html;
+            } else {
+                resultEl.innerHTML = `<div class="error-msg">${data.error || 'No products found'}</div>`;
+            }
         }
 
-        function showProductDetail(product) {
-            currentProduct = product;
-            
-            const detailEl = document.getElementById('productDetails');
-            detailEl.innerHTML = `
-                <div class="product-header">
-                    <div class="product-item-no">${product.ItemNo}</div>
-                    <div class="product-style">${product.Style}</div>
-                </div>
-
-                <div class="dimensions-grid">
-                    <div class="dimension-card">
-                        <div class="dimension-label">Width</div>
-                        <div class="dimension-value">${product.W}</div>
-                    </div>
-                    <div class="dimension-card">
-                        <div class="dimension-label">Depth</div>
-                        <div class="dimension-value">${product.D}</div>
-                    </div>
-                    <div class="dimension-card">
-                        <div class="dimension-label">Height</div>
-                        <div class="dimension-value">${product.H}</div>
-                    </div>
-                    <div class="dimension-card">
-                        <div class="dimension-label">FH</div>
-                        <div class="dimension-value">${product.FH}</div>
-                    </div>
-                </div>
-
-                <div class="section-title">Additional Dimensions</div>
-                <div class="additional-dims">
-                    <div class="small-dim">
-                        <div class="small-dim-label">SW</div>
-                        <div class="small-dim-value">${product.SW}</div>
-                    </div>
-                    <div class="small-dim">
-                        <div class="small-dim-label">SD</div>
-                        <div class="small-dim-value">${product.SD}</div>
-                    </div>
-                    <div class="small-dim">
-                        <div class="small-dim-label">SH</div>
-                        <div class="small-dim-value">${product.SH}</div>
-                    </div>
-                    <div class="small-dim">
-                        <div class="small-dim-label">FW</div>
-                        <div class="small-dim-value">${product.FW}</div>
-                    </div>
-                    <div class="small-dim">
-                        <div class="small-dim-label">RH</div>
-                        <div class="small-dim-value">${product.RH}</div>
-                    </div>
-                    <div class="small-dim">
-                        <div class="small-dim-label">LH</div>
-                        <div class="small-dim-value">${product.LH}</div>
-                    </div>
-                </div>
-
-                <div class="section-title">Packing Information</div>
-                <div class="packing-grid">
-                    <div class="packing-card">
-                        <div class="packing-label">Regular Pack CBM</div>
-                        <div class="packing-value">${product.RegularPackCBM}</div>
-                        <div class="packing-qty">Qty: ${product['Qty-Regular']}</div>
-                    </div>
-                    <div class="packing-card">
-                        <div class="packing-label">Carton Pack CBM</div>
-                        <div class="packing-value">${product.CartonPackCMB}</div>
-                        <div class="packing-qty">Qty: ${product['Qty-Carton']}</div>
-                    </div>
-                </div>
-
-                ${product.Remarks ? `
-                    <div class="section-title">Remarks</div>
-                    <div class="remarks-box">${product.Remarks}</div>
-                ` : ''}
-
-                <button class="new-search-btn" onclick="handleNewSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    搜尋其他產品 / Search Another Product
-                </button>
-            `;
-            
-            showDetailScreen();
-        }
+        // Test immediately on load
+        setTimeout(() => {
+            handleSearch();
+        }, 1000);
     </script>
 </body>
 </html>
