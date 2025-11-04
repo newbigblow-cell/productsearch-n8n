@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Scanner Test</title>
+    <meta name="theme-color" content="#667eea">
+    <title>Product Scanner</title>
     <style>
         * {
             margin: 0;
@@ -15,29 +16,51 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .card {
+        .login-card {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
         }
 
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: bold;
             text-align: center;
+            color: #333;
+            margin-bottom: 10px;
         }
 
-        .subtitle {
+        .login-subtitle {
             text-align: center;
             color: #666;
             margin-bottom: 30px;
@@ -53,6 +76,7 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 8px;
+            font-size: 14px;
         }
 
         input {
@@ -82,7 +106,7 @@
             transition: transform 0.2s;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             transform: translateY(-2px);
         }
 
@@ -96,304 +120,551 @@
             transform: none;
         }
 
-        .status {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
+        .error-msg {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 8px;
+            text-align: center;
         }
 
-        .status.show {
-            display: block;
+        .session-info {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-top: 20px;
         }
 
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .results {
-            display: none;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .product-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .product-header {
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .product-style {
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .header-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
             font-size: 20px;
             font-weight: bold;
-            color: #667eea;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        .product-item {
+        .search-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            margin-top: 10px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .no-results-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        /* Style Selection */
+        .style-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .style-card {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e9f0ff 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .style-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .style-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .style-dims {
             font-size: 14px;
             color: #666;
         }
 
-        .dimensions {
+        /* Product Details */
+        .product-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .product-item-no {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .product-style {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .data-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        .dim {
+        .data-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
         }
 
-        .dim-label {
-            font-size: 12px;
+        .data-label {
+            font-size: 11px;
             color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
 
-        .dim-value {
-            font-size: 18px;
+        .data-value {
+            font-size: 16px;
             font-weight: bold;
             color: #333;
-            margin-top: 5px;
+            word-break: break-word;
         }
 
-        .debug {
-            font-family: monospace;
-            font-size: 12px;
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+        .remarks-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin-top: 20px;
+        }
+
+        .remarks-label {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .remarks-value {
+            color: #856404;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            margin-top: 20px;
         }
 
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 3px solid #fff;
             border-top-color: transparent;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
-            margin-right: 10px;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        @media (max-width: 480px) {
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>🔍 Product Scanner Test</h1>
-            <p class="subtitle">Testing n8n webhook connection</p>
-
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-icon">🔐</div>
+            <h1 class="login-title">Product Scanner</h1>
+            <p class="login-subtitle">Enter your password to continue</p>
+            
             <div class="input-group">
-                <label>Item Number</label>
+                <label>Password</label>
                 <input 
-                    type="text" 
-                    id="itemNo" 
-                    placeholder="Enter ItemNo (e.g., BO-9922)"
-                    value="BO-9922"
+                    type="password" 
+                    id="passwordInput" 
+                    placeholder="Enter password"
+                    autocomplete="off"
                 >
             </div>
+            
+            <button onclick="handleLogin()">Login</button>
+            
+            <div id="loginError" class="error-msg hidden"></div>
+            <p class="session-info">Session valid for 25 days</p>
+        </div>
+    </div>
 
-            <button id="searchBtn" onclick="searchProduct()">
-                <span id="btnText">Search Product</span>
-            </button>
-
-            <div id="status" class="status"></div>
-
-            <div id="debugInfo" class="debug" style="display: none;"></div>
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title" id="headerTitle">Product Scanner</div>
+            <button class="header-btn" onclick="handleLogout()">Logout</button>
         </div>
 
-        <div id="results" class="results">
+        <!-- Search Screen -->
+        <div id="searchScreen" class="main-content">
             <div class="card">
-                <h2 style="margin-bottom: 20px; color: #333;">Results</h2>
-                <div id="productList"></div>
+                <h2 class="card-title">Search Product</h2>
+                
+                <div class="input-group">
+                    <label>Item Number</label>
+                    <input 
+                        type="text" 
+                        id="itemNoInput" 
+                        placeholder="Enter ItemNo (e.g., BO-9922)"
+                    >
+                </div>
+
+                <button class="search-btn" id="searchBtn" onclick="handleSearch()">
+                    <span id="searchBtnText">🔍 Search</span>
+                </button>
+
+                <div id="searchError" class="error-msg hidden"></div>
+            </div>
+        </div>
+
+        <!-- Style Selection Screen -->
+        <div id="styleScreen" class="main-content hidden">
+            <div class="card">
+                <h2 class="card-title" id="styleTitle"></h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;" id="styleCount"></p>
+                <div id="styleList" class="style-list"></div>
+                <button class="back-btn" onclick="backToSearch()">← Back to Search</button>
+            </div>
+        </div>
+
+        <!-- Product Detail Screen -->
+        <div id="detailScreen" class="main-content hidden">
+            <div class="card">
+                <div id="productDetail"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // n8n webhook URL
         const WEBHOOK_URL = 'https://n8n.hdd.hk/webhook/product-lookup';
+        const VALID_PASSWORDS = ['12345']; // Add more passwords here later
+        
+        let currentProducts = [];
+        let currentItemNo = '';
 
-        let debugLog = [];
+        // Check authentication on load
+        window.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            
+            // Enter key support for login
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            
+            // Enter key support for search
+            document.getElementById('itemNoInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleSearch();
+            });
+        });
 
-        function log(message, data = null) {
-            const timestamp = new Date().toLocaleTimeString();
-            const logEntry = `[${timestamp}] ${message}`;
-            debugLog.push(logEntry);
-            if (data) {
-                debugLog.push(JSON.stringify(data, null, 2));
+        function checkAuth() {
+            const authData = localStorage.getItem('productScannerAuth');
+            if (authData) {
+                try {
+                    const { timestamp } = JSON.parse(authData);
+                    const daysSinceLogin = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
+                    
+                    if (daysSinceLogin < 25) {
+                        showMainApp();
+                        return;
+                    } else {
+                        localStorage.removeItem('productScannerAuth');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('productScannerAuth');
+                }
             }
-            console.log(message, data);
-            updateDebugDisplay();
+            showLoginScreen();
         }
 
-        function updateDebugDisplay() {
-            const debugDiv = document.getElementById('debugInfo');
-            debugDiv.textContent = debugLog.join('\n');
-            debugDiv.style.display = 'block';
+        function handleLogin() {
+            const password = document.getElementById('passwordInput').value;
+            const errorEl = document.getElementById('loginError');
+            
+            if (VALID_PASSWORDS.includes(password)) {
+                localStorage.setItem('productScannerAuth', JSON.stringify({
+                    timestamp: Date.now()
+                }));
+                errorEl.classList.add('hidden');
+                showMainApp();
+            } else {
+                errorEl.textContent = 'Invalid password';
+                errorEl.classList.remove('hidden');
+            }
         }
 
-        function showStatus(message, type = 'info') {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type} show`;
-            log(`STATUS (${type}): ${message}`);
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('productScannerAuth');
+                currentProducts = [];
+                currentItemNo = '';
+                document.getElementById('itemNoInput').value = '';
+                showLoginScreen();
+            }
         }
 
-        async function searchProduct() {
-            const itemNo = document.getElementById('itemNo').value.trim();
+        function showLoginScreen() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            showSearchScreen();
+        }
+
+        function showSearchScreen() {
+            document.getElementById('searchScreen').classList.remove('hidden');
+            document.getElementById('styleScreen').classList.add('hidden');
+            document.getElementById('detailScreen').classList.add('hidden');
+            document.getElementById('headerTitle').textContent = 'Product Scanner';
+        }
+
+        function showStyleScreen() {
+            document.getElementById('searchScreen').classList.add('hidden');
+            document.getElementById('styleScreen').classList.remove('hidden');
+            document.getElementById('detailScreen').classList.add('hidden');
+            document.getElementById('headerTitle').textContent = 'Select Style';
+        }
+
+        function showDetailScreen() {
+            document.getElementById('searchScreen').classList.add('hidden');
+            document.getElementById('styleScreen').classList.add('hidden');
+            document.getElementById('detailScreen').classList.remove('hidden');
+            document.getElementById('headerTitle').textContent = 'Product Details';
+        }
+
+        async function handleSearch() {
+            const itemNo = document.getElementById('itemNoInput').value.trim();
+            const errorEl = document.getElementById('searchError');
             const searchBtn = document.getElementById('searchBtn');
-            const btnText = document.getElementById('btnText');
-            const resultsDiv = document.getElementById('results');
-            const productList = document.getElementById('productList');
-
-            // Clear previous results
-            debugLog = [];
-            resultsDiv.classList.remove('show');
-            productList.innerHTML = '';
-
-            // Validate input
+            const btnText = document.getElementById('searchBtnText');
+            
             if (!itemNo) {
-                showStatus('Please enter an Item Number', 'error');
+                errorEl.textContent = 'Please enter an Item Number';
+                errorEl.classList.remove('hidden');
                 return;
             }
 
-            // Disable button and show loading
+            errorEl.classList.add('hidden');
             searchBtn.disabled = true;
             btnText.innerHTML = '<span class="loading"></span>Searching...';
-            showStatus('Sending request to n8n...', 'info');
-
-            log('Starting search', { itemNo });
 
             try {
-                // Build URL with query parameter (matching your working n8n setup)
                 const url = `${WEBHOOK_URL}?ItemNo=${encodeURIComponent(itemNo)}`;
-                log('Request URL', url);
-
-                showStatus('Fetching data...', 'info');
-
                 const response = await fetch(url, {
                     method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                log('Response received', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    headers: Object.fromEntries(response.headers.entries())
+                    headers: { 'Accept': 'application/json' }
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
-                log('Data parsed', data);
-
+                
                 if (data.success && data.products && data.products.length > 0) {
-                    showStatus(`Found ${data.count} product(s)!`, 'success');
-                    displayProducts(data.products);
+                    currentProducts = data.products;
+                    currentItemNo = itemNo;
+                    
+                    if (data.products.length === 1) {
+                        showProductDetail(data.products[0]);
+                    } else {
+                        showStyleSelection();
+                    }
                 } else {
-                    showStatus('No products found', 'error');
+                    errorEl.textContent = `No such ItemNo: ${itemNo}`;
+                    errorEl.classList.remove('hidden');
                 }
-
-            } catch (error) {
-                log('ERROR', error.message);
-                showStatus(`Error: ${error.message}`, 'error');
+            } catch (err) {
+                errorEl.textContent = 'Error connecting to server. Please try again.';
+                errorEl.classList.remove('hidden');
             } finally {
                 searchBtn.disabled = false;
-                btnText.textContent = 'Search Product';
+                btnText.innerHTML = '🔍 Search';
             }
         }
 
-        function displayProducts(products) {
-            const productList = document.getElementById('productList');
-            const resultsDiv = document.getElementById('results');
-
-            productList.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-header">
-                        <div class="product-style">${product.Style}</div>
-                        <div class="product-item">${product.ItemNo}</div>
-                    </div>
-                    
-                    <div class="dimensions">
-                        <div class="dim">
-                            <div class="dim-label">Width</div>
-                            <div class="dim-value">${product.W}</div>
-                        </div>
-                        <div class="dim">
-                            <div class="dim-label">Depth</div>
-                            <div class="dim-value">${product.D}</div>
-                        </div>
-                        <div class="dim">
-                            <div class="dim-label">Height</div>
-                            <div class="dim-value">${product.H}</div>
-                        </div>
-                    </div>
-
-                    ${product.Remarks ? `
-                        <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; font-size: 14px;">
-                            <strong>Remarks:</strong> ${product.Remarks}
-                        </div>
-                    ` : ''}
+        function showStyleSelection() {
+            document.getElementById('styleTitle').textContent = `ItemNo: ${currentItemNo}`;
+            document.getElementById('styleCount').textContent = `${currentProducts.length} styles available`;
+            
+            const styleList = document.getElementById('styleList');
+            styleList.innerHTML = currentProducts.map((product, index) => `
+                <div class="style-card" onclick="showProductDetail(currentProducts[${index}])">
+                    <div class="style-name">${product.Style}</div>
+                    <div class="style-dims">W: ${product.W} × D: ${product.D} × H: ${product.H}</div>
                 </div>
             `).join('');
-
-            resultsDiv.classList.add('show');
+            
+            showStyleScreen();
         }
 
-        // Enter key support
-        document.getElementById('itemNo').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchProduct();
-            }
-        });
+        function showProductDetail(product) {
+            const detailDiv = document.getElementById('productDetail');
+            
+            detailDiv.innerHTML = `
+                <div class="product-header">
+                    <div class="product-item-no">${product.ItemNo}</div>
+                    <div class="product-style">${product.Style}</div>
+                </div>
 
-        // Auto-run test on load
-        window.addEventListener('DOMContentLoaded', function() {
-            log('Page loaded');
-            log('Testing with ItemNo: BO-9922');
-        });
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">W</div>
+                        <div class="data-value">${product.W || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">D</div>
+                        <div class="data-value">${product.D || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">H</div>
+                        <div class="data-value">${product.H || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">FH</div>
+                        <div class="data-value">${product.FH || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">SW</div>
+                        <div class="data-value">${product.SW || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">SD</div>
+                        <div class="data-value">${product.SD || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">SH</div>
+                        <div class="data-value">${product.SH || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">FW</div>
+                        <div class="data-value">${product.FW || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">RH</div>
+                        <div class="data-value">${product.RH || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">LH</div>
+                        <div class="data-value">${product.LH || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Regular CBM</div>
+                        <div class="data-value">${product.RegularPackCBM || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Qty-Regular</div>
+                        <div class="data-value">${product['Qty-Regular'] || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Carton CBM</div>
+                        <div class="data-value">${product.CartonPackCMB || '-'}</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Qty-Carton</div>
+                        <div class="data-value">${product['Qty-Carton'] || '-'}</div>
+                    </div>
+                </div>
+
+                ${product.Remarks ? `
+                    <div class="remarks-box">
+                        <div class="remarks-label">📝 Remarks:</div>
+                        <div class="remarks-value">${product.Remarks}</div>
+                    </div>
+                ` : ''}
+
+                <button class="back-btn" onclick="backToStyles()">← Back to Styles</button>
+            `;
+            
+            showDetailScreen();
+        }
+
+        function backToStyles() {
+            if (currentProducts.length > 1) {
+                showStyleSelection();
+            } else {
+                backToSearch();
+            }
+        }
+
+        function backToSearch() {
+            currentProducts = [];
+            currentItemNo = '';
+            showSearchScreen();
+        }
     </script>
 </body>
 </html>
