@@ -361,16 +361,17 @@
         <!-- Header -->
         <div class="header">
             <div class="header-title" id="headerTitle">Product Scanner</div>
-            <button class="header-btn" onclick="handleLogout()">Logout</button>
+            <button class="header-btn" onclick="handleLogout()">退出</button>
         </div>
 
         <!-- Search Screen -->
         <div id="searchScreen" class="main-content">
             <div class="card">
-                <h2 class="card-title">Search Product</h2>
+                <h2 class="card-title">产品搜索
+</h2>
                 
                 <div class="input-group">
-                    <label>Item Number</label>
+                    <label>家具型号</label>
                     <input 
                         type="text" 
                         id="itemNoInput" 
@@ -379,7 +380,7 @@
                 </div>
 
                 <button class="search-btn" id="searchBtn" onclick="handleSearch()">
-                    <span id="searchBtnText">🔍 Search</span>
+                    <span id="searchBtnText">🔍 搜索</span>
                 </button>
 
                 <div id="searchError" class="error-msg hidden"></div>
@@ -392,7 +393,7 @@
                 <h2 class="card-title" id="styleTitle"></h2>
                 <p style="text-align: center; color: #666; margin-bottom: 20px;" id="styleCount"></p>
                 <div id="styleList" class="style-list"></div>
-                <button class="back-btn" onclick="backToSearch()">← Back to Search</button>
+                <button class="back-btn" onclick="backToSearch()">← 发回搜索</button>
             </div>
         </div>
 
@@ -488,21 +489,21 @@
             document.getElementById('searchScreen').classList.remove('hidden');
             document.getElementById('styleScreen').classList.add('hidden');
             document.getElementById('detailScreen').classList.add('hidden');
-            document.getElementById('headerTitle').textContent = 'Product Scanner';
+            document.getElementById('headerTitle').textContent = '百事达家具';
         }
 
         function showStyleScreen() {
             document.getElementById('searchScreen').classList.add('hidden');
             document.getElementById('styleScreen').classList.remove('hidden');
             document.getElementById('detailScreen').classList.add('hidden');
-            document.getElementById('headerTitle').textContent = 'Select Style';
+            document.getElementById('headerTitle').textContent = '选款';
         }
 
         function showDetailScreen() {
             document.getElementById('searchScreen').classList.add('hidden');
             document.getElementById('styleScreen').classList.add('hidden');
             document.getElementById('detailScreen').classList.remove('hidden');
-            document.getElementById('headerTitle').textContent = 'Product Details';
+            document.getElementById('headerTitle').textContent = ' 产品资料';
         }
 
         async function handleSearch() {
@@ -548,11 +549,11 @@
                     errorEl.classList.remove('hidden');
                 }
             } catch (err) {
-                errorEl.textContent = 'Error connecting to server. Please try again.';
+                errorEl.textContent = '型号不对 或 网络不通, 请再次尝试.';
                 errorEl.classList.remove('hidden');
             } finally {
                 searchBtn.disabled = false;
-                btnText.innerHTML = '🔍 Search';
+                btnText.innerHTML = '🔍 搜索';
             }
         }
 
@@ -582,71 +583,72 @@
 
                 <div class="data-grid">
                     <div class="data-item">
-                        <div class="data-label">W</div>
+                        <div class="data-label">W总长</div>
                         <div class="data-value">${product.W || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">D</div>
+                        <div class="data-label">D总深</div>
                         <div class="data-value">${product.D || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">H</div>
+                        <div class="data-label">H总高</div>
                         <div class="data-value">${product.H || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">FH</div>
+                        <div class="data-label">FH扶手高</div>
                         <div class="data-value">${product.FH || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">SW</div>
+                        <div class="data-label">SW座宽</div>
                         <div class="data-value">${product.SW || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">SD</div>
+                        <div class="data-label">SD座深</div>
                         <div class="data-value">${product.SD || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">SH</div>
+                        <div class="data-label">SH座高</div>
                         <div class="data-value">${product.SH || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">FW</div>
+                        <div class="data-label">FW扶手宽</div>
                         <div class="data-value">${product.FW || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">RH</div>
+                        <div class="data-label">RH屏架高</div>
                         <div class="data-value">${product.RH || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">LH</div>
+                        <div class="data-label">LH脚高</div>
                         <div class="data-value">${product.LH || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">Regular CBM</div>
+                        <div class="data-label">常规装CBM</div>
                         <div class="data-value">${product.RegularPackCBM || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">Qty-Regular</div>
+                        <div class="data-label">常规柜量</div>
                         <div class="data-value">${product['Qty-Regular'] || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">Carton CBM</div>
+                        <div class="data-label">箱装CBM</div>
                         <div class="data-value">${product.CartonPackCMB || '-'}</div>
                     </div>
                     <div class="data-item">
-                        <div class="data-label">Qty-Carton</div>
+                        <div class="data-label">箱装柜量</div>
                         <div class="data-value">${product['Qty-Carton'] || '-'}</div>
                     </div>
                 </div>
 
                 ${product.Remarks ? `
                     <div class="remarks-box">
-                        <div class="remarks-label">📝 Remarks:</div>
+                        <div class="remarks-label">📝 Remarks备注:</div>
                         <div class="remarks-value">${product.Remarks}</div>
                     </div>
                 ` : ''}
 
-                <button class="back-btn" onclick="backToStyles()">← Back to Styles</button>
+                <button class="back-btn" onclick="backToStyles()">← 发回选款
+</button>
             `;
             
             showDetailScreen();
