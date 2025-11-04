@@ -559,7 +559,7 @@
 
         function showStyleSelection() {
             document.getElementById('styleTitle').textContent = `ItemNo: ${currentItemNo}`;
-            document.getElementById('styleCount').textContent = `${currentProducts.length} 个款总共`;
+            document.getElementById('styleCount').textContent = `${currentProducts.length} styles available`;
             
             const styleList = document.getElementById('styleList');
             styleList.innerHTML = currentProducts.map((product, index) => `
